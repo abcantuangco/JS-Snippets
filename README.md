@@ -1,7 +1,7 @@
 # JS-Snippets
 Helpful javascript snippets
 
-##dataSorter
+## dataSorter
 
-###Usage
+### Usage
 dataSorter(items, { 'keyValue': 'value', 'rank': true });
