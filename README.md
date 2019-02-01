@@ -11,6 +11,7 @@ It will sort array values depending in sort preference and option to add ranking
 ##### value: false
 
 ### Sample Usage
+``` js
 <code>
 var items = [
   { name: 'Edward', value: 21 },
