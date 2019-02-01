@@ -11,7 +11,7 @@ It will sort array values depending in sort preference and option to add ranking
 ##### value: false
 
 ### Sample Usage
-
+<code>
 var items = [
   { name: 'Edward', value: 21 },
   { name: 'Sharpe', value: 37 },
@@ -22,3 +22,4 @@ var items = [
 ];
 
 dataSorter(items, { 'keyValue': 'value', 'rank': true, 'sort': 'asc' });
+</code>
