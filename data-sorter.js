@@ -3,63 +3,64 @@
  * @version 1.0
  */
 
-let dataSorter = function( data, options ) {
+const dataSorter = ( data, options ) => {
 
-    let sortedData = [];
+    try {
 
-    if (typeof data === 'undefined') {
-        console.log('Data input is required.');
-        return;
-    }
+        let sortedData = [];
 
-    if (typeof options === 'undefined') {
-        console.log('Option input is required.');
-        return;
-    }
+        if (typeof data === 'undefined')
+            throw new Error('Data input is required.');
 
-    if ( typeof options.rank === 'undefined' ) {
-        options.rank = false;
-    }
+        if (typeof options === 'undefined')
+            throw new Error('Option input is required.')
 
-    if ( typeof options.sort === 'undefined' ) {
-        options.sort = 'desc';
-    }
+        if ( typeof options.rank === 'undefined' )
+            options.rank = false;
 
-    // sort data
-    data.sort(function (a, b) {
-        if ( options.sort === 'asc' ) {
-            return  a[ options.keyValue ] - b[ options.keyValue ];
-        } else {
-            return  b[ options.keyValue ] - a[ options.keyValue ];
-        }
-    });
+        if ( typeof options.sort === 'undefined' )
+            options.sort = 'desc';
 
-    // add rank
-    if ( options.rank === true ) {
-        let rank = 1,
-            dataLength = data.length,
-            dataLastIdx = dataLength - 1,
-            sameRank = 0;
-
-        data.forEach(function(item, idx){
-            if ( idx === dataLastIdx ) {
-                item.rank = rank;
+        // sort data
+        data.sort(function (a, b) {
+            if ( options.sort === 'asc' ) {
+                return  a[ options.keyValue ] - b[ options.keyValue ];
             } else {
-                if ( item[ options.keyValue ] !== data[ idx + 1 ][ options.keyValue ] ) {
-                    item.rank = rank;
-                    if ( sameRank > 0 ) {
-                        rank += sameRank;
-                        sameRank = 0;
-                    }
-                    rank++;
-                } else {
-                    item.rank = rank;
-                    sameRank++;
-                }
+                return  b[ options.keyValue ] - a[ options.keyValue ];
             }
-            sortedData.push(item);
         });
-    }
 
-    return sortedData;
-};
+        // add rank
+        if ( options.rank === true ) {
+            let rank = 1,
+                dataLength = data.length,
+                dataLastIdx = dataLength - 1,
+                sameRank = 0;
+
+            data.forEach(function(item, idx){
+                if ( idx === dataLastIdx ) {
+                    item.rank = rank;
+                } else {
+                    if ( item[ options.keyValue ] !== data[ idx + 1 ][ options.keyValue ] ) {
+                        item.rank = rank;
+                        if ( sameRank > 0 ) {
+                            rank += sameRank;
+                            sameRank = 0;
+                        }
+                        rank++;
+                    } else {
+                        item.rank = rank;
+                        sameRank++;
+                    }
+                }
+                sortedData.push(item);
+            });
+        }
+
+        return sortedData;
+
+    } catch(e){
+        console.info(e.message);
+        return;
+    }
+}
