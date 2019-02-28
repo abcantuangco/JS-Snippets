@@ -1,23 +1,27 @@
+const domBuilder = (function() {
 
-const domBuilder = ( options ) => new Promise((resolve, reject) => {
-
-    const _build = ( options ) => {
+    const build = ( options ) => {
         let settings = {
             element: null,
             dom: null,
             data: null,
-            buildType: 'html'
+            buildType: 'html',
+            returnView: false
         };
 
         if ( typeof options !== 'undefined' )
             Object.assign( settings, options );
 
-        return _buildView( settings );
+        return buildView( settings );
 
     };
 
-    const _buildView = ( options ) => new Promise((resolve, reject) => {
-        let $element = document.querySelector( options.element );
+    const buildView = ( options ) => new Promise((resolve, reject) => {
+        
+        if ( options.returnView === false ) {
+            var $element = document.querySelector( options.element );
+        }
+        
         let $view = typeof options.dom === 'function' ? options.dom( options.data ) : false;
 
         if (!$view)
@@ -26,24 +30,48 @@ const domBuilder = ( options ) => new Promise((resolve, reject) => {
         switch ( options.buildType ) {
             case 'html':
             {
-                return new Promise((resolve, reject) => {
-                            $element.innerHTML = $view;
-                            resolve($view);
-                        });
+                if ( options.returnView === false ) 
+                    $element.innerHTML = $view;
             }
             break;
             case 'append':
             {
-                return new Promise((resolve, reject) => {
-                            $element.innerHTML += $view;
-                            resolve($view);
-                        });
+                if ( options.returnView === false ) 
+                    $element.innerHTML += $view;
             }
             break;
         }
+
+        resolve($view);
     });
 
     return {
-        build: build
+        build: (o) => {
+            return build(o);
+        }
     };
 });
+
+
+var test = new domBuilder();
+
+var data = { 'test': 'value' };
+
+var dom = function( data ) {
+    return '<div>'+ data.test +'</div>';
+}
+
+test.build({
+    element: '#test',
+    dom: false,
+    data: data,
+    buildType: 'append',
+    returnView: false
+})
+.then((v) => {
+    console.log('test', v);
+})
+.catch((e) => {
+    console.log(e.message);
+});
+
