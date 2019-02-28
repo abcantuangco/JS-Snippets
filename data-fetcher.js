@@ -1,13 +1,9 @@
 
 const dataFetcher = (url, options) => new Promise((resolve, reject) => {
-    
     const request = new XMLHttpRequest();
 
     if ( typeof options.method === 'undefined' )
         options.method = "GET";
-
-    if ( typeof options.content_type === 'undefined' || options.method === "POST" )
-        options.content_type = "application/x-www-form-urlencoded";
 
     request.addEventListener('readystatechange', (e) => {
         if (e.target.readyState === 4 && e.target.status === 200) {
@@ -21,7 +17,6 @@ const dataFetcher = (url, options) => new Promise((resolve, reject) => {
     request.responseType = options.response_type;
 
     if ( typeof options.data !== 'undefined' ) {
-        // request.setRequestHeader('Content-type', options.content_type);  // its weird that I need to remove this since it's not working as expected
         request.send( options.data );
     } else {
         request.send();
